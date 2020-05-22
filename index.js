@@ -1,30 +1,21 @@
 'use strict';
 const hyperledger = require("./hyperledger");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const express = require("express");
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
 app.post('/registerOrder', (req, res) => {
-    // const cart = {
-    //     ID: '12345',
-    //     shopID: '44444',
-    //     buyerID: '11111',
-    //     date: new Date().toUTCString(),
-    //     items: [
-    //         {ID: 'IDarticulo', name: 'art_1', price: 10, quantity: 1},
-    //         {ID: 'IDarticulo22', name: 'art_2', price: 10, quantity: 2},
-    //         {ID: 'IDarticulo33', name: 'art_3', price: 10, quantity: 3},
-    //     ]
-    // };
-    const cart = req.body.order;
-    hyperledger.registerOrder(cart).then((result) => {
+    const order = req.body.order;
+    hyperledger.registerOrder(order).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {
@@ -33,6 +24,6 @@ app.post('/registerOrder', (req, res) => {
     })
 });
 
-app.listen(3000, () => {
-    console.log('Express running on port 3000!')
+app.listen(3098, () => {
+    console.log('Express running on port 3098!')
 });

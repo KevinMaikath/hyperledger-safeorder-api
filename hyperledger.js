@@ -6,8 +6,7 @@ function queryOrder() {
 
 }
 
-async function registerOrder(cart) {
-    const order = initializeOrder(cart);
+async function registerOrder(order) {
     // A wallet stores a collection of identities for use
     let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');
 
@@ -53,25 +52,6 @@ async function registerOrder(cart) {
         console.log('Disconnect from Fabric gateway.');
         gateway.disconnect();
     }
-}
-
-function initializeOrder(cart) {
-    cart.ID = generateID();
-    cart.buyerID = '11111';
-    cart.shopID = '44444';
-    cart.date = new Date().toUTCString();
-    return cart;
-}
-
-function generateID() {
-    let num = Math.floor(Math.random() * 100000).toString();
-    if (num.length < 5) {
-        const len = num.length;
-        for (let i = 0; i < 5 - len; i++) {
-            num = '0' + num;
-        }
-    }
-    return num;
 }
 
 module.exports = {
