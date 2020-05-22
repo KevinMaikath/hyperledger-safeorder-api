@@ -9,6 +9,10 @@
   "author": "Kevin Maikath",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fabric-client": "^2.0.0-beta.2",
+    "fabric-network": "^2.0.0-beta.4",
+    "jsrsasign": "^8.0.15",
+    "minimist": "^1.2.5"
   }
 }
