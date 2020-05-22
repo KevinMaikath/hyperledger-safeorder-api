@@ -1,4 +1,5 @@
 const fs = require('fs');
+const yaml = require('js-yaml');
 const {Wallets, Gateway} = require('fabric-network');
 
 function queryOrder() {
@@ -14,9 +15,7 @@ async function registerOrder(cart) {
     const userName = 'isabella';
 
     // Load connection profile; will be used to locate a gateway
-    // let connectionProfile = yaml.safeLoad(fs.readFileSync('../organization/magnetocorp/gateway/connection-org2.yaml', 'utf8'));
-    const connectionProfileJson = (await fs.promises.readFile('../organization/magnetocorp/gateway/connection-org2.json')).toString();
-    const connectionProfile = JSON.parse(connectionProfileJson);
+    let connectionProfile = yaml.safeLoad(fs.readFileSync('../organization/magnetocorp/gateway/connection-org2.yaml', 'utf8'));
 
     const gateway = new Gateway();
 
@@ -38,10 +37,17 @@ async function registerOrder(cart) {
         const response = await contract.submitTransaction('registerOrder', Buffer.from(JSON.stringify(order)));
         console.log(JSON.parse(response.toString()));
         console.log('--------------------------- Transaction complete ---------------------------');
+        return {
+            error: false,
+            payload: JSON.parse(response.toString())
+        }
 
-    } catch (e) {
-        console.log('_______ERROR AT INIT GATEWAY');
-        console.log(e);
+    } catch (err) {
+        console.log(err);
+        return {
+            error: true,
+            message: err.responses[0].response.message
+        }
     } finally {
         // Disconnect from the gateway
         console.log('Disconnect from Fabric gateway.');
@@ -54,6 +60,7 @@ function initializeOrder(cart) {
     cart.buyerID = '11111';
     cart.shopID = '44444';
     cart.date = new Date().toUTCString();
+    return cart;
 }
 
 function generateID() {
