@@ -1,14 +1,17 @@
 'use strict';
 const hyperledger = require("./hyperledger");
-
+const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-app.get('/registerOrder', (req, res) => {
+app.post('/registerOrder', (req, res) => {
     // const cart = {
     //     ID: '12345',
     //     shopID: '44444',
@@ -20,7 +23,7 @@ app.get('/registerOrder', (req, res) => {
     //         {ID: 'IDarticulo33', name: 'art_3', price: 10, quantity: 3},
     //     ]
     // };
-    const cart = req.params.order;
+    const cart = req.body.order;
     hyperledger.registerOrder(cart).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
