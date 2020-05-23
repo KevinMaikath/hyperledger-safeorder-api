@@ -21,7 +21,22 @@ app.post('/registerOrder', (req, res) => {
         } else {
             res.status(200).json(result.payload);
         }
-    })
+    });
+});
+
+app.post('/queryOrderByUser', (req, res) => {
+    const userID = req.body.userID;
+    hyperledger.registerOrder(userID).then((result) => {
+        if (result.error) {
+            res.status(400).send(result.message);
+        } else {
+            res.status(200).json(result.payload);
+        }
+    });
+    //
+    // setTimeout(() => {
+    //     res.status(400).json({orderList: []})
+    // }, 3000);
 });
 
 app.listen(3098, () => {
