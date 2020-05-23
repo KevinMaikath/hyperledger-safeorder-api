@@ -26,7 +26,7 @@ app.post('/registerOrder', (req, res) => {
 
 app.post('/queryOrderByUser', (req, res) => {
     const userID = req.body.userID;
-    hyperledger.registerOrder(userID).then((result) => {
+    hyperledger.queryOrderByUser(userID).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {

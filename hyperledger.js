@@ -99,5 +99,6 @@ async function registerOrder(order) {
 }
 
 module.exports = {
-    registerOrder
+    registerOrder,
+    queryOrderByUser
 };
