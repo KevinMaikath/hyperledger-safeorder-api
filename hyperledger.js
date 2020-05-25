@@ -2,7 +2,7 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const {Wallets, Gateway} = require('fabric-network');
 
-async function queryOrderByUser(userID) {
+async function queryOrderByUser(buyerID) {
     // A wallet stores a collection of identities for use
     let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');
 
@@ -29,7 +29,7 @@ async function queryOrderByUser(userID) {
         console.log('Use the smart contract.');
         const contract = await network.getContract('safeorder', 'org.safeorder.ordercontract');
         console.log('----------------------- Smart Contract Execution ---------------------------');
-        const response = await contract.submitTransaction('queryOrderByUser', userID);
+        const response = await contract.submitTransaction('queryOrderByBuyerID', buyerID);
         console.log(JSON.parse(response.toString()));
         console.log('--------------------------- Transaction complete ---------------------------');
         return {

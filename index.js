@@ -24,9 +24,9 @@ app.post('/registerOrder', (req, res) => {
     });
 });
 
-app.post('/queryOrderByUser', (req, res) => {
-    const userID = req.body.userID;
-    hyperledger.queryOrderByUser(userID).then((result) => {
+app.post('/queryOrderByBuyerID', (req, res) => {
+    const buyerID = req.body.buyerID;
+    hyperledger.queryOrderByUser(buyerID).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {
