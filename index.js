@@ -19,23 +19,29 @@ passport.use(passportStrategy);
 
 // Authorization endpoints
 app.post('/login', (req, res) => {
-    const {username, password} = req.body;
+    console.log(req.body);
     try {
         if (!username || !password) {
-            throw new Error('Faltan parámetros')
+            throw new Error('Missing fields')
         }
         const user = userModel.getUserByUsername(username);
         if (!user) {
-            throw new Error('Problema al loguear el usuario');
+            throw new Error('User not found');
         }
         const isMatch = userModel.checkPassword(user.username, req.body.password);
         if (isMatch) {
             return res.status(200).send({token: createToken(user)});
+        } else {
+            throw new Error(`Incorrect password`);
         }
-        return res.status(400).send(`No se ha podido autenticar al usuario: ${{user}}`);
+        throw new Error(`Error while login as user: ${user.username}`);
     } catch (e) {
         res.status(400).send(e);
     }
+});
+
+app.post('/checkToken', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.status(200).send({message: 'OK'});
 });
 
 function createToken(user) {
@@ -68,5 +74,4 @@ app.post('/queryOrderByBuyerID', passport.authenticate('jwt', {session: false}),
 
 app.listen(process.env.PORT, () => {
     console.log(`Express running on port ${process.env.PORT}!`);
-    console.log(process.env.JWT_SECRET)
 });
