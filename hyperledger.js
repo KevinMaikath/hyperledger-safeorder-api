@@ -2,6 +2,10 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const {Wallets, Gateway} = require('fabric-network');
 
+/**
+ * Connect to the Hyperledger Network and invoke the 'queryOrderByBuyerID' Smart Contract.
+ * @param buyerID String denoting the ID of the buyer user for the query.
+ */
 async function queryOrderByUser(buyerID) {
     // A wallet stores a collection of identities for use
     let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');
@@ -50,6 +54,10 @@ async function queryOrderByUser(buyerID) {
     }
 }
 
+/**
+ * Connect to the Hyperledger Network and invoke the 'registerOrder' Smart Contract.
+ * @param order Order to be registered into the ledger.
+ */
 async function registerOrder(order) {
     // A wallet stores a collection of identities for use
     let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');

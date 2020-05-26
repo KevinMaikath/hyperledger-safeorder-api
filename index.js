@@ -18,8 +18,12 @@ app.use(cors());
 passport.use(passportStrategy);
 
 // Authorization endpoints
+/**
+ * Authenticate a user with a given username and password.
+ * Return an Authentication JSON-Web-Token if the login succeeds.
+ */
 app.post('/login', (req, res) => {
-    console.log(req.body);
+    const {username, password} = req.body;
     try {
         if (!username || !password) {
             throw new Error('Missing fields')
@@ -40,6 +44,9 @@ app.post('/login', (req, res) => {
     }
 });
 
+/**
+ * This function's main purpose is to check whether an auth_token is still valid or not.
+ */
 app.post('/checkToken', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.status(200).send({message: 'OK'});
 });
@@ -50,6 +57,10 @@ function createToken(user) {
 }
 
 // Hyperledger endpoints
+/**
+ * Receive an order and try to register it into the ledger.
+ * Returns all the order info if it succeeds.
+ */
 app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req, res) => {
     const order = req.body.order;
     hyperledger.registerOrder(order).then((result) => {
@@ -61,6 +72,9 @@ app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req,
     });
 });
 
+/**
+ * Given a buyerID, returns a list of orders with that buyerID from the ledger.
+ */
 app.post('/queryOrderByBuyerID', passport.authenticate('jwt', {session: false}), (req, res) => {
     const buyerID = req.body.buyerID;
     hyperledger.queryOrderByUser(buyerID).then((result) => {
