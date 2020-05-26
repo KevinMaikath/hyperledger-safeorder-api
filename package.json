@@ -11,11 +11,16 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fabric-client": "^2.0.0-beta.2",
     "fabric-network": "^2.0.0-beta.4",
     "js-yaml": "^3.13.1",
+    "jsonwebtoken": "^8.5.1",
     "jsrsasign": "^8.0.15",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   }
 }
