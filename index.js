@@ -63,8 +63,7 @@ function createToken(user) {
  */
 app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req, res) => {
     const order = req.body.order;
-    const userID = req.body.userID;
-    hyperledger.registerOrder(order, userID).then((result) => {
+    hyperledger.registerOrder(order).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {

@@ -57,9 +57,8 @@ async function queryOrderByUser(buyerID) {
 /**
  * Connect to the Hyperledger Network and invoke the 'registerOrder' Smart Contract.
  * @param order Order to be registered into the ledger.
- * @param userID ID from the user registering the order.
  */
-async function registerOrder(order, userID) {
+async function registerOrder(order) {
 
     if (!isOrderValid(order)) {
         return {
@@ -71,7 +70,7 @@ async function registerOrder(order, userID) {
     let connectionOptions = {};
 
     try {
-        connectionOptions = await getConnectionOptions(userID);
+        connectionOptions = await getConnectionOptions(order.buyerID);
     } catch (err) {
         return {
             error: true,
