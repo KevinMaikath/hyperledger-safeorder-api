@@ -61,6 +61,13 @@ async function queryOrderByUser(buyerID) {
  */
 async function registerOrder(order, userID) {
 
+    if (!isOrderValid(order)) {
+        return {
+            error: false,
+            payload: 'Invalid order'
+        };
+    }
+
     let connectionOptions = {};
 
     try {
@@ -120,6 +127,18 @@ async function getConnectionOptions(userID) {
         wallet: wallet,
         discovery: {enabled: true, asLocalhost: true}
     };
+}
+
+/**
+ * Check all the order params.
+ * @param order Order to be validated.
+ */
+function isOrderValid(order) {
+    return (!!order.ID && order.ID.length === 5
+        && !!order.buyerID
+        && !!order.shopID
+        && !!order.date
+        && order.items.length > 0);
 }
 
 module.exports = {
