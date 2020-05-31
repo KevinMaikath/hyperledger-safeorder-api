@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
         }
         const isMatch = userModel.checkPassword(user.username, req.body.password);
         if (isMatch) {
-            return res.status(200).send({token: createToken(user)});
+            return res.status(200).send({token: createToken(user), ID: user.ID});
         } else {
             throw new Error(`Incorrect password`);
         }
@@ -63,7 +63,8 @@ function createToken(user) {
  */
 app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req, res) => {
     const order = req.body.order;
-    hyperledger.registerOrder(order).then((result) => {
+    const userID = req.body.userID;
+    hyperledger.registerOrder(order, userID).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {
@@ -76,8 +77,8 @@ app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req,
  * Given a buyerID, returns a list of orders with that buyerID from the ledger.
  */
 app.post('/queryOrderByBuyerID', passport.authenticate('jwt', {session: false}), (req, res) => {
-    const buyerID = req.body.buyerID;
-    hyperledger.queryOrderByUser(buyerID).then((result) => {
+    const userID = req.body.userID;
+    hyperledger.queryOrderByUser(userID).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {

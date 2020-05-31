@@ -3,16 +3,25 @@
 const users = [
     {
         username: 'isabella',
-        password: 'isabella'
+        password: 'isabella',
+        ID: '11111',
+        walletPath: '../organization/magnetocorp/identity/user/isabella/wallet'
     },
     {
         username: 'balaji',
-        password: 'balaji'
+        password: 'balaji',
+        ID: '22222',
+        walletPath: '../organization/magnetocorp/identity/user/isabella/wallet'
     }
 ];
 
 function getUserByUsername(username) {
     return users.find(user => user.username === username);
+}
+
+function getUsernameAndWallet(userID) {
+    const user = users.find(user => user.ID === userID);
+    return !!user ? {username: user.username, walletPath: user.walletPath} : null;
 }
 
 function checkPassword(username, password) {
@@ -26,5 +35,6 @@ function checkPassword(username, password) {
 
 module.exports = {
     getUserByUsername,
+    getUsernameAndWallet,
     checkPassword
 };

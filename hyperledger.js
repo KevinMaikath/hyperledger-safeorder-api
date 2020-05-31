@@ -1,5 +1,6 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
+const userModel = require("./userModel");
 const {Wallets, Gateway} = require('fabric-network');
 
 /**
@@ -7,11 +8,16 @@ const {Wallets, Gateway} = require('fabric-network');
  * @param buyerID String denoting the ID of the buyer user for the query.
  */
 async function queryOrderByUser(buyerID) {
-    // A wallet stores a collection of identities for use
-    let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');
+    let connectionOptions = {};
 
-    // Specify userName for network access
-    const userName = 'isabella';
+    try {
+        connectionOptions = await getConnectionOptions(buyerID);
+    } catch (err) {
+        return {
+            error: true,
+            message: err.message
+        }
+    }
 
     // Load connection profile; will be used to locate a gateway
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../organization/magnetocorp/gateway/connection-org2.yaml', 'utf8'));
@@ -19,12 +25,6 @@ async function queryOrderByUser(buyerID) {
     const gateway = new Gateway();
 
     try {
-        let connectionOptions = {
-            identity: userName,
-            wallet: wallet,
-            discovery: {enabled: true, asLocalhost: true}
-        };
-
         // EXECUTION
         console.log('Connect to Fabric gateway.');
         await gateway.connect(connectionProfile, connectionOptions);
@@ -57,26 +57,26 @@ async function queryOrderByUser(buyerID) {
 /**
  * Connect to the Hyperledger Network and invoke the 'registerOrder' Smart Contract.
  * @param order Order to be registered into the ledger.
+ * @param userID ID from the user registering the order.
  */
-async function registerOrder(order) {
-    // A wallet stores a collection of identities for use
-    let wallet = await Wallets.newFileSystemWallet('../organization/magnetocorp/identity/user/isabella/wallet');
+async function registerOrder(order, userID) {
 
-    // Specify userName for network access
-    const userName = 'isabella';
+    let connectionOptions = {};
+
+    try {
+        connectionOptions = await getConnectionOptions(userID);
+    } catch (err) {
+        return {
+            error: true,
+            message: err.message
+        }
+    }
 
     // Load connection profile; will be used to locate a gateway
     let connectionProfile = yaml.safeLoad(fs.readFileSync('../organization/magnetocorp/gateway/connection-org2.yaml', 'utf8'));
-
     const gateway = new Gateway();
 
     try {
-        let connectionOptions = {
-            identity: userName,
-            wallet: wallet,
-            discovery: {enabled: true, asLocalhost: true}
-        };
-
         // EXECUTION
         console.log('Connect to Fabric gateway.');
         await gateway.connect(connectionProfile, connectionOptions);
@@ -104,6 +104,22 @@ async function registerOrder(order) {
         console.log('Disconnect from Fabric gateway.');
         gateway.disconnect();
     }
+}
+
+/**
+ * Get the user's wallet as a ConnectionOptions object.
+ * @param userID User to get the wallet from.
+ */
+async function getConnectionOptions(userID) {
+    const user = userModel.getUsernameAndWallet(userID);
+    if (!user) throw new Error('Error while processing user wallet');
+
+    let wallet = await Wallets.newFileSystemWallet(user.walletPath);
+    return {
+        identity: user.username,
+        wallet: wallet,
+        discovery: {enabled: true, asLocalhost: true}
+    };
 }
 
 module.exports = {
