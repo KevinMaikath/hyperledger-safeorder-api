@@ -11,7 +11,7 @@ const users = [
         username: 'balaji',
         password: 'balaji',
         ID: '22222',
-        walletPath: '../organization/magnetocorp/identity/user/isabella/wallet'
+        walletPath: '../organization/digibank/identity/user/balaji/wallet'
     }
 ];
 
