@@ -68,7 +68,7 @@ app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req,
         if (result.error) {
             res.status(400).send(result.message);
         } else {
-            res.status(200).json(result.payload);
+            res.status(200).json({order: result.payload});
         }
     });
 });
@@ -82,7 +82,7 @@ app.post('/queryOrderByBuyerID', passport.authenticate('jwt', {session: false}),
         if (result.error) {
             res.status(400).send(result.message);
         } else {
-            res.status(200).json(result.payload);
+            res.status(200).json({orderList: result.payload});
         }
     });
 });
