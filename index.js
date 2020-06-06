@@ -77,7 +77,7 @@ app.post('/registerOrder', passport.authenticate('jwt', {session: false}), (req,
  */
 app.post('/queryOrderByBuyerID', passport.authenticate('jwt', {session: false}), (req, res) => {
     const userID = req.body.userID;
-    hyperledger.queryOrderByUser(userID).then((result) => {
+    hyperledger.queryOrderByBuyerID(userID).then((result) => {
         if (result.error) {
             res.status(400).send(result.message);
         } else {

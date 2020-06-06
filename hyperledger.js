@@ -7,7 +7,7 @@ const {Wallets, Gateway} = require('fabric-network');
  * Connect to the Hyperledger Network and invoke the 'queryOrderByBuyerID' Smart Contract.
  * @param buyerID String denoting the ID of the buyer user for the query.
  */
-async function queryOrderByUser(buyerID) {
+async function queryOrderByBuyerID(buyerID) {
     let connectionOptions = {};
 
     try {
@@ -142,5 +142,5 @@ function isOrderValid(order) {
 
 module.exports = {
     registerOrder,
-    queryOrderByUser
+    queryOrderByBuyerID
 };
